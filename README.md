@@ -1,69 +1,185 @@
+/*
+Cleaning Datat in SQL queries
+
+*/
+
+select * 
+from project_portfolio ..[Nashveil_housing ];
 
 
-Overview
+-------------------------------------------------------------------------------------------------------------------------
 
-This SQL script performs data cleaning and preprocessing on the Nashveil_housing dataset within the project_portfolio database. It ensures data consistency, improves data structure, and removes redundancy to enhance data usability for analysis.
+--Populate Property Address Date 
 
-Features & Steps
 
-1. Initial Data Exploration
+select *
+from  project_portfolio ..[Nashveil_housing ]
+--where PropertyAddress is Null
+order by 2;
 
-Fetches all records from the dataset for review.
+select a.ParcelID , a.PropertyAddress ,b.ParcelID , b.PropertyAddress , ISNULL(a.PropertyAddress ,b.PropertyAddress)
+from  project_portfolio ..[Nashveil_housing ] as a 
+join  project_portfolio ..[Nashveil_housing ] as b 
+  on 
+    a.ParcelID = b.ParcelID
+	and 
+	a.UniqueID <> b.UniqueID
+where a.PropertyAddress is Null;
 
-Identifies missing or inconsistent values.
 
-2. Populating Missing Property Addresses
 
-Finds missing PropertyAddress values.
+update a 
+Set PropertyAddress = ISNULL(a.PropertyAddress ,b.PropertyAddress)
+from  project_portfolio ..[Nashveil_housing ] as a 
+join  project_portfolio ..[Nashveil_housing ] as b 
+  on 
+    a.ParcelID = b.ParcelID
+	and 
+	a.UniqueID <> b.UniqueID
+where a.PropertyAddress is Null;
 
-Uses self-joins and the ISNULL function to fill missing values based on matching ParcelID.
 
-Updates the table with the corrected values.
+------------------------------------------------------------------------------------------------------------------------
 
-3. Breaking Down Address Components
 
-Splits PropertyAddress into PropertySplitAddress (street) and PropertySplitCity (city) using SUBSTRING and CHARINDEX.
+---Breaking Out Address into individual Columns (Address , City , States)
 
-Splits OwnerAddress into OwnerSplitAddress, OwnerSplitCity, and OwnerSplitState using PARSENAME after replacing commas.
+select PropertyAddress
+from  project_portfolio ..[Nashveil_housing ]
+--where PropertyAddress is Null
+--order by 2;
 
-4. Converting Binary Values to Readable Text
 
-Converts the SoldAsVacant field from 0 and 1 to 'No' and 'Yes'.
+select 
+SUBSTRING (PropertyAddress ,1 ,CHARINDEX(',' ,PropertyAddress)-1) as Address
+, SUBSTRING (PropertyAddress ,CHARINDEX(',' ,PropertyAddress)+1 , Len(PropertyAddress) )as Address
 
-Alters the column data type from BIT to VARCHAR(3).
+from  project_portfolio ..[Nashveil_housing ];
 
-Updates values accordingly.
 
-5. Removing Duplicates
+Alter table project_portfolio ..[Nashveil_housing ]
+add PropertySplitAddress Nvarchar(255);
 
-Uses a Common Table Expression (CTE) with ROW_NUMBER() to identify duplicate records.
+update project_portfolio ..[Nashveil_housing ]
+set PropertySplitAddress = SUBSTRING(PropertyAddress ,1 ,CHARINDEX(',' ,PropertyAddress)-1) ;
 
-Filters out rows where row_num > 1.
 
-6. Deleting Unused Columns
+Alter table project_portfolio ..[Nashveil_housing ]
+add PropertySplitCity Nvarchar(255);
 
-Drops unnecessary columns like OwnerAddress, TaxDistrict, and PropertyAddress to optimize storage and performance.
 
-Usage
+update  project_portfolio ..[Nashveil_housing ]
+set PropertySplitCity = SUBSTRING (PropertyAddress ,CHARINDEX(',' ,PropertyAddress)+1 , Len(PropertyAddress) );
 
-Ensure you have access to the project_portfolio database.
 
-Run the script step by step to clean and preprocess the dataset.
+select * 
+from project_portfolio ..[Nashveil_housing ];
 
-Verify results by querying the modified dataset.
 
-Technologies Used
 
-SQL Server
 
-T-SQL Functions: ISNULL, CHARINDEX, SUBSTRING, PARSENAME, ROW_NUMBER()
+select OwnerAddress
+from project_portfolio ..[Nashveil_housing ];
 
-Joins & CTEs for data transformation and deduplication
+select 
+PARSENAME(replace(OwnerAddress , ',' ,'.') ,3)
+,PARSENAME(replace(OwnerAddress , ',' ,'.') ,2)
+,PARSENAME(replace(OwnerAddress , ',' ,'.') ,1)
+from project_portfolio ..[Nashveil_housing ];
 
-License
 
-This project is open-source and available for educational and analytical use.
+Alter table project_portfolio ..[Nashveil_housing ]
+add OwnerSplitAddress Nvarchar(255);
 
-Feel free to contribute or suggest improvements!
+update project_portfolio ..[Nashveil_housing ]
+set OwnerSplitAddress = PARSENAME(replace(OwnerAddress , ',' ,'.') ,3) 
+
+
+
+Alter table project_portfolio ..[Nashveil_housing ]
+add OwnerSplitCity Nvarchar(255);
+
+update project_portfolio ..[Nashveil_housing ]
+set OwnerSplitCity = PARSENAME(replace(OwnerAddress , ',' ,'.') ,2) ;
+
+
+Alter table project_portfolio ..[Nashveil_housing ]
+add OwnerSplitState Nvarchar(255);
+
+update project_portfolio ..[Nashveil_housing ]
+set OwnerSplitstate = PARSENAME(replace(OwnerAddress , ',' ,'.') ,1) ;
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+
+--Change 0 and 1 to yes and no in "SoldAsVacant" Feild 
+
+
+select  distinct SoldAsVacant ,count(SoldAsVacant) 
+from project_portfolio ..[Nashveil_housing ] 
+group by SoldAsVacant;
+
+
+ select 
+ SoldAsVacant,
+ case 
+ when  SoldAsVacant = 0 then 'No' else 'Yes'
+ end
+ from project_portfolio ..[Nashveil_housing ] 
+ group by SoldAsVacant;
+
+ Alter table project_portfolio ..[Nashveil_housing ] 
+ alter Column SoldAsVacant varchar(3);
+
+
+update project_portfolio ..[Nashveil_housing ] 
+set SoldAsVacant = case 
+ when  SoldAsVacant = 0 then 'No' else 'Yes'
+ end;
+
+
+
+ --------------------------------------------------------------------------------------------------------------------
+
+
+ --Remove Duplicates 
+
+
+ With ROW_NUMBER_CTE as 
+ (
+ select *,
+          ROW_NUMBER()Over(
+		  PARTITION  BY ParcelID,
+		                PropertyAddress,
+						SalePrice,
+						SaleDate,
+						LegalReference
+						order by 
+						       UniqueID) row_num
+ from project_portfolio ..[Nashveil_housing ]
+ ---order by ParcelID
+ )
+ Select*
+ from ROW_NUMBER_CTE
+ where row_num > 1 
+ --order by PropertyAddress;
+
+
+
+
+ --------------------------------------------------------------------------------------------------------------------
+ -- Delete Unused Columns 
+
+ select *
+from project_portfolio ..[Nashveil_housing ]
+
+Alter table project_portfolio ..[Nashveil_housing ]
+Drop Column OwnerAddress,TaxDistrict,PropertyAddress;
+
+
+
+
 
 
