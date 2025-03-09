@@ -69,14 +69,11 @@ data-cleaning-project/
 1️⃣ Load the raw **Nashville Housing** dataset into a **SQL Server database**.  
 2️⃣ Run the SQL scripts **step by step** in the `scripts/` folder.  
 3️⃣ Validate the cleaned data using:  
-   ```sql
-   SELECT * FROM project_portfolio..Nashveil_housing;
-
-   SELECT * FROM project_portfolio..Nashveil_housing;
 4️⃣ Use the final cleaned dataset for analytics, reporting, or visualization.
 
 ## 🛡️ License
 This project is licensed under the MIT License. Feel free to use, modify, and share it with proper attribution.
+
 
 ##🌟 About Me
 I’m an aspiring data enthusiast passionate about solving real-world problems and working with teams. Connect with me on LinkedIn:
