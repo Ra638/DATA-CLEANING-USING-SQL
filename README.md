@@ -29,6 +29,7 @@ This project follows a **structured approach** to data cleaning using **SQL best
 ---
 
 ## 📂 Repository Structure  
+```
 
 data-cleaning-project/
 │
@@ -50,7 +51,7 @@ data-cleaning-project/
 ├── LICENSE                             # License for the project
 └── .gitignore                          # Files ignored by Git
 
-
+```
 
 ---
 
@@ -74,9 +75,7 @@ data-cleaning-project/
 ## 🛡️ License
 This project is licensed under the MIT License. Feel free to use, modify, and share it with proper attribution.
 
-
-##🌟 About Me
-I’m an aspiring data enthusiast passionate about solving real-world problems and working with teams. Connect with me on LinkedIn:
-🔗 www.linkedin.com/in/rayanahmed2002/
-
+## 🌟 About Me
+I am Aspiring data enthusiast lokking to Contritube to real world Problems and Passionate of working with Teams 
+catch up with me or as they say Ping me on Linkdin : www.linkedin.com/in/rayanahmed2002/
 
