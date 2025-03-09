@@ -30,7 +30,26 @@ This project follows a **structured approach** to data cleaning using **SQL best
 
 ## 📂 Repository Structure  
 
-data-cleaning-project/ │ ├── datasets/ # Raw dataset (Nashville Housing Data) │ ├── scripts/ # SQL scripts for data cleaning │ ├── 01_missing_values.sql # Handling missing property addresses │ ├── 02_split_address.sql # Breaking address fields into separate columns │ ├── 03_standardize_values.sql # Standardizing categorical fields │ ├── 04_remove_duplicates.sql # Removing duplicate records │ ├── 05_optimize_schema.sql # Dropping unused columns │ ├── docs/ # Project documentation │ ├── data_model.drawio # ER diagram of cleaned dataset │ ├── data_flow.drawio # Data flow and cleaning process │ ├── data_dictionary.md # Metadata and field descriptions │ ├── README.md # Project overview and instructions ├── LICENSE # License for the project └── .gitignore # Files ignored by Git
+data-cleaning-project/
+│
+├── datasets/                           # Raw dataset (Nashville Housing Data)
+│
+├── scripts/                            # SQL scripts for data cleaning
+│   ├── 01_missing_values.sql           # Handling missing property addresses
+│   ├── 02_split_address.sql            # Breaking address fields into separate columns
+│   ├── 03_standardize_values.sql       # Standardizing categorical fields
+│   ├── 04_remove_duplicates.sql        # Removing duplicate records
+│   ├── 05_optimize_schema.sql          # Dropping unused columns
+│
+├── docs/                               # Project documentation
+│   ├── data_model.drawio               # ER diagram of cleaned dataset
+│   ├── data_flow.drawio                # Data flow and cleaning process
+│   ├── data_dictionary.md               # Metadata and field descriptions
+│
+├── README.md                           # Project overview and instructions
+├── LICENSE                             # License for the project
+└── .gitignore                          # Files ignored by Git
+
 
 
 ---
@@ -56,11 +75,11 @@ data-cleaning-project/ │ ├── datasets/ # Raw dataset (Nashville Housing 
    SELECT * FROM project_portfolio..Nashveil_housing;
 4️⃣ Use the final cleaned dataset for analytics, reporting, or visualization.
 
-🛡️ License
+## 🛡️ License
 This project is licensed under the MIT License. Feel free to use, modify, and share it with proper attribution.
 
-🌟 About Me
-I’m an aspiring data enthusiast passionate about solving real-world problems and working with teams.
-🔗 Connect with me on LinkedIn: www.linkedin.com/in/rayanahmed2002/
+##🌟 About Me
+I’m an aspiring data enthusiast passionate about solving real-world problems and working with teams. Connect with me on LinkedIn:
+🔗 www.linkedin.com/in/rayanahmed2002/
 
 
